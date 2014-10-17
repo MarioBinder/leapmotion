@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    <title>Leap Fingers</title>
+    <title></title>
+    <style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: #024;
+        color: #fff;
+    }
+    div {
+        text-align: center;
+        font-size: 30px;
+        font-family: Helvetica, Arial, sans-serif;
+    }
+    #hands,
+    #fingers {
+        font-weight: bold;
+        font-size: 120px;
+    }
+    </style>
+    <script src="http://js.leapmotion.com/0.2.0-beta1/leap.min.js"></script>
+    <script>
+    var pausedFrame = null;
+    var latestFrame = null;
+    window.onkeypress = function(e) {
+        if (e.charCode == 32) {
+            if (pausedFrame == null) {
+                pausedFrame = latestFrame;
+            } else {
+                pausedFrame = null;
+            }
+        }
+    };
+
+
+
+    var controller = new Leap.Controller({
+        enableGestures: true
+    });
+    controller.loop(function(frame) {
+        latestFrame = frame;
+
+        var hands = latestFrame.hands.length;
+        var fingers = latestFrame.fingers.length;
+        var a = hands == 1 ? "hand" : "hands";
+        var b = fingers == 1 ? "finger" : "fingers";
+
+
+        var old = 0;
+        if (old != latestFrame.fingers.length) {
+
+            document.getElementById('fingers').innerHTML = b + ": " + fingers;
+            document.getElementById('hands').innerHTML = a + ": " + hands;
+        } else {
+            document.getElementById('fingers').innerHTML = "";
+            document.getElementById('hands').innerHTML = "";
+        }
+
+    });
+    </script>
+</head>
+
+<body>
+
+    <div id="fingers"></div>
+    <div id="hands"></div>
+</body>
+
+</html>
